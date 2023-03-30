@@ -1,15 +1,12 @@
 const express = require('express');
-const pulls = require('./db/db.json');
-
+const api = require('./routes/api');
+const html = require('./routes/html');
 const app = express();
+const PORT = process.env.PORT || 3001;
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
+app.use('/api', api);
+app.use('/', html);
 
-app.get('/', (req, res) => {
-  res.send(
-    'Use the API endpoint at <a href="http://localhost:3001/api">localhost:3001/api</a>'
-  );
-});
-
-// Endpoint to return our own locally stored data
-app.get('/api', (req, res) => res.json(pulls));
-
-app.listen(3001, () => console.log('Express Server on port 3001!'));
+app.listen(PORT, () => console.log(`Listening on PORT: ${PORT}`));
